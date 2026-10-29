@@ -14,11 +14,7 @@
     --white: #ffffff;
   }
 
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
   html, body {
     height: 100%;
@@ -33,39 +29,44 @@
     overflow: hidden;
   }
 
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; cursor: pointer; border: none; background: none; }
 
-  button {
-    font: inherit;
-    cursor: pointer;
-    border: none;
-    background: none;
-  }
-
-  /* ========== LAYOUT: SELALU KIRI-KANAN ========== */
+  /* ========== LAYOUT ========== */
   .launcher {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
     height: 100vh;
     height: 100dvh;
-    width: 100vw;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--yellow);
     overflow: hidden;
   }
 
-  /* ========== KIRI: GAMBAR ========== */
+  /* ========== ATAS: SPONSOR 1:1 + GRADIENT + BLUR ========== */
   .launcher-visual {
-    position: relative;
-    background: #000;
-    overflow: hidden;
+    flex: 1 1 auto;
     min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(8px, 1.5vh, 20px) 16px clamp(4px, 0.8vh, 10px);
+    overflow: hidden;
+    background: var(--yellow);
   }
 
-  .launcher-visual img {
-    position: absolute;
-    inset: 0;
+  .sponsor-wrap {
+    position: relative;
+    width: var(--sponsor-size, min(100%, 55vh, 640px));
+    height: var(--sponsor-size, min(100%, 55vh, 640px));
+    border-radius: clamp(12px, 1.2vw, 20px);
+    overflow: hidden;
+    box-shadow: 0 14px 34px rgba(26, 22, 8, 0.22);
+    flex: none;
+    isolation: isolate;
+  }
+
+  .sponsor-wrap img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -73,31 +74,72 @@
     display: block;
   }
 
-  /* ========== KANAN: KUNING + TOMBOL ========== */
+  /* Lapisan blur bertahap dari bawah */
+  .sponsor-wrap::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(12px) saturate(1.05);
+    -webkit-backdrop-filter: blur(12px) saturate(1.05);
+    -webkit-mask-image: linear-gradient(to bottom,
+      transparent 0%,
+      transparent 45%,
+      rgba(0, 0, 0, 0.25) 60%,
+      rgba(0, 0, 0, 0.6) 78%,
+      black 100%);
+    mask-image: linear-gradient(to bottom,
+      transparent 0%,
+      transparent 45%,
+      rgba(0, 0, 0, 0.25) 60%,
+      rgba(0, 0, 0, 0.6) 78%,
+      black 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Gradasi warna kuning menyatu dengan panel bawah */
+  .sponsor-wrap::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 55%;
+    background: linear-gradient(to bottom,
+      rgba(255, 200, 0, 0) 0%,
+      rgba(255, 200, 0, 0.08) 18%,
+      rgba(255, 200, 0, 0.28) 38%,
+      rgba(255, 200, 0, 0.55) 58%,
+      rgba(255, 200, 0, 0.8) 78%,
+      rgba(255, 200, 0, 0.95) 92%,
+      #ffc800 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* ========== BAWAH: PANEL KUNING + TOMBOL ========== */
   .launcher-panel {
-    background: var(--yellow);
+    flex: 0 0 auto;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: 56px clamp(20px, 4vw, 64px);
-    position: relative;
-    overflow-y: auto;
-    min-height: 0;
+    gap: clamp(8px, 1.2vh, 14px);
+    padding: clamp(10px, 1.6vh, 20px) clamp(16px, 4vw, 56px) clamp(10px, 1.4vh, 16px);
+    background: var(--yellow);
   }
 
   .panel-brand {
-    position: absolute;
-    top: 28px;
-    left: clamp(20px, 4vw, 64px);
     display: flex;
     align-items: center;
     gap: 10px;
+    max-width: 520px;
+    width: 100%;
+    margin: 0 auto;
   }
 
   .brand-mark {
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
     background: var(--ink);
     position: relative;
     flex: none;
@@ -106,7 +148,7 @@
   .brand-mark::before {
     content: "";
     position: absolute;
-    inset: 7px 8px;
+    inset: 6px 7px;
     border: 2px solid var(--yellow);
     border-bottom: none;
     border-radius: 3px 3px 0 0;
@@ -116,16 +158,16 @@
     content: "";
     position: absolute;
     left: 50%;
-    bottom: 7px;
+    bottom: 6px;
     transform: translateX(-50%);
     width: 5px;
-    height: 8px;
+    height: 7px;
     background: var(--yellow);
     border-radius: 1px 1px 0 0;
   }
 
   .brand-text {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 800;
     letter-spacing: -0.3px;
     line-height: 1.1;
@@ -134,7 +176,7 @@
 
   .brand-text small {
     display: block;
-    font-size: 10px;
+    font-size: 9.5px;
     font-weight: 700;
     letter-spacing: 0.2px;
     color: rgba(26, 22, 8, 0.6);
@@ -145,7 +187,7 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    max-width: 420px;
+    max-width: 520px;
     width: 100%;
     margin: 0 auto;
   }
@@ -155,27 +197,26 @@
     width: fit-content;
     background: rgba(26, 22, 8, 0.08);
     border: 1px solid rgba(26, 22, 8, 0.12);
-    padding: 5px 11px;
+    padding: 4px 10px;
     border-radius: 999px;
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 800;
     letter-spacing: 0.4px;
-    margin-bottom: 8px;
   }
 
   .panel-content h1 {
-    font-size: clamp(24px, 3.2vw, 42px);
-    line-height: 1.05;
-    letter-spacing: -1.2px;
-    margin-bottom: 8px;
+    font-size: clamp(18px, 2.4vw, 26px);
+    line-height: 1.1;
+    letter-spacing: -0.8px;
+    margin: 2px 0;
   }
 
   .panel-content p {
-    font-size: 13.5px;
+    font-size: clamp(11px, 1.1vw, 13px);
     color: var(--ink-soft);
-    line-height: 1.55;
-    margin-bottom: 22px;
-    max-width: 380px;
+    line-height: 1.45;
+    margin-bottom: 4px;
+    max-width: 440px;
   }
 
   /* TOMBOL */
@@ -184,10 +225,10 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 16px 20px;
+    padding: clamp(10px, 1.4vh, 14px) clamp(14px, 1.6vw, 20px);
     border-radius: 12px;
     font-weight: 800;
-    font-size: 15px;
+    font-size: 14px;
     letter-spacing: -0.2px;
     transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
     text-align: left;
@@ -195,9 +236,7 @@
     border: 2px solid transparent;
   }
 
-  .btn:active {
-    transform: scale(0.985);
-  }
+  .btn:active { transform: scale(0.985); }
 
   .btn .btn-label {
     display: flex;
@@ -207,13 +246,13 @@
   }
 
   .btn .btn-title {
-    font-size: 15px;
+    font-size: clamp(12.5px, 1.2vw, 14.5px);
     font-weight: 800;
     line-height: 1.2;
   }
 
   .btn .btn-sub {
-    font-size: 11px;
+    font-size: clamp(9.5px, 0.85vw, 11px);
     font-weight: 600;
     opacity: 0.7;
     letter-spacing: 0;
@@ -223,19 +262,18 @@
   }
 
   .btn .btn-icon {
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
     border-radius: 999px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     flex: none;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 900;
     line-height: 1;
   }
 
-  /* Tombol utama */
   .btn-primary {
     background: var(--ink);
     color: var(--yellow);
@@ -249,26 +287,19 @@
 
   .btn-primary:hover {
     background: #2b2510;
-    transform: translateY(-2px);
     box-shadow: 0 12px 28px rgba(26, 22, 8, 0.24);
   }
 
-  /* Tombol sekunder (coming soon) */
   .btn-secondary {
     background: rgba(255, 255, 255, 0.55);
     color: var(--ink);
     border: 2px dashed rgba(26, 22, 8, 0.25);
     cursor: not-allowed;
-    position: relative;
   }
 
   .btn-secondary .btn-icon {
     background: rgba(26, 22, 8, 0.12);
     color: var(--ink);
-  }
-
-  .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.7);
   }
 
   .coming-badge {
@@ -285,34 +316,28 @@
     text-transform: uppercase;
   }
 
-  /* FOOTER PANEL */
   .panel-footer {
-    position: absolute;
-    bottom: 20px;
-    left: clamp(20px, 4vw, 64px);
-    right: clamp(20px, 4vw, 64px);
-    font-size: 11px;
-    color: rgba(26, 22, 8, 0.55);
     display: flex;
     justify-content: space-between;
     gap: 8px;
     flex-wrap: wrap;
+    font-size: 10.5px;
+    color: rgba(26, 22, 8, 0.55);
+    max-width: 520px;
+    width: 100%;
+    margin: 0 auto;
+    padding-top: 2px;
   }
 
-  /* ========== RESPONSIVE: TETAP KIRI-KANAN ========== */
+  /* ========== MOBILE ========== */
   @media (max-width: 760px) {
-    .launcher {
-      grid-template-columns: 1fr 1fr;
+    .launcher-visual {
+      padding: 10px 12px 4px;
     }
 
     .launcher-panel {
-      padding: 56px 16px 48px;
-    }
-
-    .panel-brand {
-      top: 16px;
-      left: 16px;
-      gap: 7px;
+      padding: 12px 16px 12px;
+      gap: 10px;
     }
 
     .brand-mark {
@@ -321,123 +346,108 @@
       border-radius: 6px;
     }
 
-    .brand-mark::before {
-      inset: 5px 6px;
-      border-width: 1.8px;
-    }
+    .brand-mark::before { inset: 5px 6px; border-width: 1.8px; }
+    .brand-mark::after { bottom: 5px; width: 4px; height: 6px; }
 
-    .brand-mark::after {
-      bottom: 5px;
-      width: 4px;
-      height: 6px;
-    }
-
-    .brand-text {
-      font-size: 11.5px;
-    }
-
-    .brand-text small {
-      font-size: 8.5px;
-    }
+    .brand-text { font-size: 11.5px; }
+    .brand-text small { font-size: 8.5px; }
 
     .panel-content h1 {
-      font-size: clamp(18px, 4vw, 24px);
-      letter-spacing: -0.8px;
+      font-size: clamp(17px, 4.5vw, 22px);
+      letter-spacing: -0.6px;
     }
 
     .panel-content p {
       font-size: 11px;
-      margin-bottom: 14px;
-      line-height: 1.45;
+      margin-bottom: 2px;
     }
 
     .panel-eyebrow {
       font-size: 9.5px;
-      padding: 4px 8px;
+      padding: 3px 8px;
     }
 
     .btn {
-      padding: 11px 12px;
+      padding: 11px 13px;
       border-radius: 10px;
       gap: 8px;
     }
 
-    .btn .btn-title {
-      font-size: 12.5px;
-    }
-
-    .btn .btn-sub {
-      font-size: 9px;
-    }
+    .btn .btn-title { font-size: 12.5px; }
+    .btn .btn-sub { font-size: 9px; }
 
     .btn .btn-icon {
       width: 24px;
       height: 24px;
-      font-size: 12px;
+      font-size: 11.5px;
     }
 
     .coming-badge {
-      font-size: 7.5px;
-      padding: 1px 5px;
-      margin-left: 3px;
+      font-size: 8px;
+      padding: 1px 6px;
+      margin-left: 4px;
     }
 
     .panel-footer {
-      left: 16px;
-      right: 16px;
-      bottom: 12px;
       font-size: 9px;
+      gap: 4px;
     }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 420px) {
     .launcher-panel {
-      padding: 48px 12px 42px;
+      padding: 10px 12px 10px;
+      gap: 8px;
     }
 
-    .panel-brand {
-      top: 12px;
-      left: 12px;
+    .panel-content h1 { font-size: 16px; }
+    .panel-content p { font-size: 10px; line-height: 1.4; }
+
+    .btn { padding: 10px 12px; }
+    .btn .btn-title { font-size: 12px; }
+    .btn .btn-sub { font-size: 8.5px; }
+
+    .btn .btn-icon {
+      width: 22px;
+      height: 22px;
+      font-size: 10.5px;
     }
 
-    .brand-text {
-      font-size: 10px;
+    .panel-footer { font-size: 8.5px; }
+  }
+
+  /* ========== LANDSCAPE PENDEK ========== */
+  @media (max-height: 560px) and (orientation: landscape) {
+    .launcher-visual {
+      padding: 6px 12px 2px;
     }
 
-    .brand-text small {
-      font-size: 7.5px;
+    .launcher-panel {
+      padding: 8px 20px 8px;
+      gap: 6px;
     }
+
+    .brand-mark { width: 22px; height: 22px; }
+
+    .brand-text { font-size: 10.5px; }
+    .brand-text small { font-size: 8px; }
+
+    .panel-eyebrow { display: none; }
 
     .panel-content h1 {
-      font-size: 16px;
-      letter-spacing: -0.5px;
-      margin-bottom: 4px;
+      font-size: 15px;
+      letter-spacing: -0.4px;
     }
 
-    .panel-content p {
-      font-size: 10px;
-      margin-bottom: 10px;
-    }
-
-    .panel-eyebrow {
-      font-size: 8.5px;
-      padding: 3px 7px;
-      margin-bottom: 4px;
-    }
+    .panel-content p { display: none; }
 
     .btn {
-      padding: 9px 10px;
-      gap: 6px;
+      padding: 8px 12px;
       border-radius: 8px;
     }
 
-    .btn .btn-title {
-      font-size: 11px;
-    }
-
-    .btn .btn-sub {
-      font-size: 8px;
-    }
+    .btn .btn-title { font-size: 11.5px; }
+    .btn .btn-sub { font-size: 8.5px; }
 
     .btn .btn-icon {
       width: 20px;
@@ -445,54 +455,14 @@
       font-size: 10px;
     }
 
-    .coming-badge {
-      font-size: 7px;
-      padding: 1px 4px;
-    }
-
-    .panel-footer {
-      left: 12px;
-      right: 12px;
-      bottom: 8px;
-      font-size: 8px;
-    }
+    .panel-footer { font-size: 8px; }
   }
 
-  /* Layar landscape pendek (mis. HP miring) */
-  @media (max-height: 480px) {
-    .launcher-panel {
-      padding: 44px 20px 40px;
-    }
-
-    .panel-brand {
-      top: 12px;
-    }
-
-    .panel-content h1 {
-      font-size: clamp(18px, 3vw, 24px);
-      margin-bottom: 4px;
-    }
-
-    .panel-content p {
-      font-size: 11px;
-      margin-bottom: 12px;
-    }
-
-    .btn {
-      padding: 10px 14px;
-    }
-
-    .btn .btn-title {
-      font-size: 12.5px;
-    }
-
-    .btn .btn-sub {
-      font-size: 9.5px;
-    }
-
-    .panel-footer {
-      bottom: 8px;
-    }
+  /* Fallback untuk layar super pendek */
+  @media (max-height: 400px) {
+    body { overflow-y: auto; }
+    .launcher { height: auto; min-height: 100vh; }
+    .launcher-visual { min-height: 200px; }
   }
 </style>
 </head>
@@ -500,12 +470,14 @@
 
 <div class="launcher">
 
-  <!-- KIRI: GAMBAR SPONSOR FULL SCREEN -->
+  <!-- ATAS: SPONSOR DENGAN EFEK GRADIENT + BLUR -->
   <div class="launcher-visual">
-    <img src="sponsor.jpg" alt="Sponsor">
+    <div class="sponsor-wrap">
+      <img src="sponsor.jpg" alt="Sponsor">
+    </div>
   </div>
 
-  <!-- KANAN: KUNING + TOMBOL -->
+  <!-- BAWAH: PANEL + TOMBOL -->
   <div class="launcher-panel">
 
     <div class="panel-brand">
@@ -524,7 +496,6 @@
         Fitur Top Up sedang disiapkan.
       </p>
 
-      <!-- Tombol 1: Kunjungi Bisnis -->
       <a
         href="https://agcomstore.github.io/business.com"
         target="_blank"
@@ -538,7 +509,6 @@
         <span class="btn-icon">&rarr;</span>
       </a>
 
-      <!-- Tombol 2: Top Up (Coming Soon) -->
       <button
         type="button"
         class="btn btn-secondary"
@@ -568,6 +538,46 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+
+  /* ========== AUTO-SIZE SPONSOR AGAR PAS DI SEGALA LAYAR ========== */
+  var visual = document.querySelector('.launcher-visual');
+
+  function sizeSponsor() {
+    if (!visual) return;
+    var cs = window.getComputedStyle(visual);
+    var pt = parseFloat(cs.paddingTop) || 0;
+    var pb = parseFloat(cs.paddingBottom) || 0;
+    var pl = parseFloat(cs.paddingLeft) || 0;
+    var pr = parseFloat(cs.paddingRight) || 0;
+
+    var availW = visual.clientWidth - pl - pr;
+    var availH = visual.clientHeight - pt - pb;
+
+    if (availW <= 0 || availH <= 0) return;
+
+    /* Ambil sisi terkecil agar selalu kotak sempurna */
+    var size = Math.max(80, Math.floor(Math.min(availW, availH)));
+    visual.style.setProperty('--sponsor-size', size + 'px');
+  }
+
+  /* Ukur pertama kali */
+  sizeSponsor();
+
+  /* Ukur ulang saat window resize */
+  window.addEventListener('resize', sizeSponsor);
+  window.addEventListener('orientationchange', function () {
+    setTimeout(sizeSponsor, 120);
+  });
+
+  /* Ukur ulang otomatis setiap container berubah ukuran */
+  if (window.ResizeObserver) {
+    new ResizeObserver(function () { sizeSponsor(); }).observe(visual);
+  }
+
+  /* Panggil setelah semua resource (gambar, font) selesai dimuat */
+  window.addEventListener('load', sizeSponsor);
+
+  /* ========== TOP UP BUTTON ========== */
   var topUpBtn = document.querySelector('.btn-secondary');
   if (topUpBtn) {
     topUpBtn.addEventListener('click', function (e) {
@@ -575,587 +585,7 @@ document.addEventListener('DOMContentLoaded', function () {
       alert('Fitur Top Up segera hadir. Nantikan update dari agcomstore - GitJoki.');
     });
   }
-});
-</script>
 
-</body>
-</html><!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>agcomstore - Launcher</title>
-
-<style>
-  :root {
-    --yellow: #ffc800;
-    --ink: #1a1608;
-    --ink-soft: #5a5440;
-    --line: #e6d58a;
-    --white: #ffffff;
-  }
-
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  html, body {
-    height: 100%;
-    width: 100%;
-  }
-
-  body {
-    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
-    background: var(--yellow);
-    color: var(--ink);
-    -webkit-font-smoothing: antialiased;
-    overflow: hidden;
-  }
-
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  button {
-    font: inherit;
-    cursor: pointer;
-    border: none;
-    background: none;
-  }
-
-  /* ========== LAYOUT: SELALU KIRI-KANAN ========== */
-  .launcher {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    height: 100vh;
-    height: 100dvh;
-    width: 100vw;
-    overflow: hidden;
-  }
-
-  /* ========== KIRI: GAMBAR ========== */
-  .launcher-visual {
-    position: relative;
-    background: #000;
-    overflow: hidden;
-    min-height: 0;
-  }
-
-  .launcher-visual img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-  }
-
-  /* ========== KANAN: KUNING + TOMBOL ========== */
-  .launcher-panel {
-    background: var(--yellow);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 56px clamp(20px, 4vw, 64px);
-    position: relative;
-    overflow-y: auto;
-    min-height: 0;
-  }
-
-  .panel-brand {
-    position: absolute;
-    top: 28px;
-    left: clamp(20px, 4vw, 64px);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .brand-mark {
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
-    background: var(--ink);
-    position: relative;
-    flex: none;
-  }
-
-  .brand-mark::before {
-    content: "";
-    position: absolute;
-    inset: 7px 8px;
-    border: 2px solid var(--yellow);
-    border-bottom: none;
-    border-radius: 3px 3px 0 0;
-  }
-
-  .brand-mark::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    bottom: 7px;
-    transform: translateX(-50%);
-    width: 5px;
-    height: 8px;
-    background: var(--yellow);
-    border-radius: 1px 1px 0 0;
-  }
-
-  .brand-text {
-    font-size: 14px;
-    font-weight: 800;
-    letter-spacing: -0.3px;
-    line-height: 1.1;
-    color: var(--ink);
-  }
-
-  .brand-text small {
-    display: block;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.2px;
-    color: rgba(26, 22, 8, 0.6);
-    margin-top: 1px;
-  }
-
-  .panel-content {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    max-width: 420px;
-    width: 100%;
-    margin: 0 auto;
-  }
-
-  .panel-eyebrow {
-    display: inline-block;
-    width: fit-content;
-    background: rgba(26, 22, 8, 0.08);
-    border: 1px solid rgba(26, 22, 8, 0.12);
-    padding: 5px 11px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.4px;
-    margin-bottom: 8px;
-  }
-
-  .panel-content h1 {
-    font-size: clamp(24px, 3.2vw, 42px);
-    line-height: 1.05;
-    letter-spacing: -1.2px;
-    margin-bottom: 8px;
-  }
-
-  .panel-content p {
-    font-size: 13.5px;
-    color: var(--ink-soft);
-    line-height: 1.55;
-    margin-bottom: 22px;
-    max-width: 380px;
-  }
-
-  /* TOMBOL */
-  .btn {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 16px 20px;
-    border-radius: 12px;
-    font-weight: 800;
-    font-size: 15px;
-    letter-spacing: -0.2px;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
-    text-align: left;
-    width: 100%;
-    border: 2px solid transparent;
-  }
-
-  .btn:active {
-    transform: scale(0.985);
-  }
-
-  .btn .btn-label {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
-  }
-
-  .btn .btn-title {
-    font-size: 15px;
-    font-weight: 800;
-    line-height: 1.2;
-  }
-
-  .btn .btn-sub {
-    font-size: 11px;
-    font-weight: 600;
-    opacity: 0.7;
-    letter-spacing: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .btn .btn-icon {
-    width: 30px;
-    height: 30px;
-    border-radius: 999px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: none;
-    font-size: 14px;
-    font-weight: 900;
-    line-height: 1;
-  }
-
-  /* Tombol utama */
-  .btn-primary {
-    background: var(--ink);
-    color: var(--yellow);
-    box-shadow: 0 8px 20px rgba(26, 22, 8, 0.18);
-  }
-
-  .btn-primary .btn-icon {
-    background: var(--yellow);
-    color: var(--ink);
-  }
-
-  .btn-primary:hover {
-    background: #2b2510;
-    transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(26, 22, 8, 0.24);
-  }
-
-  /* Tombol sekunder (coming soon) */
-  .btn-secondary {
-    background: rgba(255, 255, 255, 0.55);
-    color: var(--ink);
-    border: 2px dashed rgba(26, 22, 8, 0.25);
-    cursor: not-allowed;
-    position: relative;
-  }
-
-  .btn-secondary .btn-icon {
-    background: rgba(26, 22, 8, 0.12);
-    color: var(--ink);
-  }
-
-  .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.7);
-  }
-
-  .coming-badge {
-    display: inline-block;
-    background: var(--ink);
-    color: var(--yellow);
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-size: 9px;
-    font-weight: 900;
-    letter-spacing: 0.5px;
-    margin-left: 6px;
-    vertical-align: middle;
-    text-transform: uppercase;
-  }
-
-  /* FOOTER PANEL */
-  .panel-footer {
-    position: absolute;
-    bottom: 20px;
-    left: clamp(20px, 4vw, 64px);
-    right: clamp(20px, 4vw, 64px);
-    font-size: 11px;
-    color: rgba(26, 22, 8, 0.55);
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  /* ========== RESPONSIVE: TETAP KIRI-KANAN ========== */
-  @media (max-width: 760px) {
-    .launcher {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .launcher-panel {
-      padding: 56px 16px 48px;
-    }
-
-    .panel-brand {
-      top: 16px;
-      left: 16px;
-      gap: 7px;
-    }
-
-    .brand-mark {
-      width: 24px;
-      height: 24px;
-      border-radius: 6px;
-    }
-
-    .brand-mark::before {
-      inset: 5px 6px;
-      border-width: 1.8px;
-    }
-
-    .brand-mark::after {
-      bottom: 5px;
-      width: 4px;
-      height: 6px;
-    }
-
-    .brand-text {
-      font-size: 11.5px;
-    }
-
-    .brand-text small {
-      font-size: 8.5px;
-    }
-
-    .panel-content h1 {
-      font-size: clamp(18px, 4vw, 24px);
-      letter-spacing: -0.8px;
-    }
-
-    .panel-content p {
-      font-size: 11px;
-      margin-bottom: 14px;
-      line-height: 1.45;
-    }
-
-    .panel-eyebrow {
-      font-size: 9.5px;
-      padding: 4px 8px;
-    }
-
-    .btn {
-      padding: 11px 12px;
-      border-radius: 10px;
-      gap: 8px;
-    }
-
-    .btn .btn-title {
-      font-size: 12.5px;
-    }
-
-    .btn .btn-sub {
-      font-size: 9px;
-    }
-
-    .btn .btn-icon {
-      width: 24px;
-      height: 24px;
-      font-size: 12px;
-    }
-
-    .coming-badge {
-      font-size: 7.5px;
-      padding: 1px 5px;
-      margin-left: 3px;
-    }
-
-    .panel-footer {
-      left: 16px;
-      right: 16px;
-      bottom: 12px;
-      font-size: 9px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .launcher-panel {
-      padding: 48px 12px 42px;
-    }
-
-    .panel-brand {
-      top: 12px;
-      left: 12px;
-    }
-
-    .brand-text {
-      font-size: 10px;
-    }
-
-    .brand-text small {
-      font-size: 7.5px;
-    }
-
-    .panel-content h1 {
-      font-size: 16px;
-      letter-spacing: -0.5px;
-      margin-bottom: 4px;
-    }
-
-    .panel-content p {
-      font-size: 10px;
-      margin-bottom: 10px;
-    }
-
-    .panel-eyebrow {
-      font-size: 8.5px;
-      padding: 3px 7px;
-      margin-bottom: 4px;
-    }
-
-    .btn {
-      padding: 9px 10px;
-      gap: 6px;
-      border-radius: 8px;
-    }
-
-    .btn .btn-title {
-      font-size: 11px;
-    }
-
-    .btn .btn-sub {
-      font-size: 8px;
-    }
-
-    .btn .btn-icon {
-      width: 20px;
-      height: 20px;
-      font-size: 10px;
-    }
-
-    .coming-badge {
-      font-size: 7px;
-      padding: 1px 4px;
-    }
-
-    .panel-footer {
-      left: 12px;
-      right: 12px;
-      bottom: 8px;
-      font-size: 8px;
-    }
-  }
-
-  /* Layar landscape pendek (mis. HP miring) */
-  @media (max-height: 480px) {
-    .launcher-panel {
-      padding: 44px 20px 40px;
-    }
-
-    .panel-brand {
-      top: 12px;
-    }
-
-    .panel-content h1 {
-      font-size: clamp(18px, 3vw, 24px);
-      margin-bottom: 4px;
-    }
-
-    .panel-content p {
-      font-size: 11px;
-      margin-bottom: 12px;
-    }
-
-    .btn {
-      padding: 10px 14px;
-    }
-
-    .btn .btn-title {
-      font-size: 12.5px;
-    }
-
-    .btn .btn-sub {
-      font-size: 9.5px;
-    }
-
-    .panel-footer {
-      bottom: 8px;
-    }
-  }
-</style>
-</head>
-<body>
-
-<div class="launcher">
-
-  <!-- KIRI: GAMBAR SPONSOR FULL SCREEN -->
-  <div class="launcher-visual">
-    <img src="sponsor.jpg" alt="Sponsor">
-  </div>
-
-  <!-- KANAN: KUNING + TOMBOL -->
-  <div class="launcher-panel">
-
-    <div class="panel-brand">
-      <div class="brand-mark"></div>
-      <div class="brand-text">
-        agcomstore
-        <small>GitJoki</small>
-      </div>
-    </div>
-
-    <div class="panel-content">
-      <span class="panel-eyebrow">Launcher</span>
-      <h1>Pilih tujuan Anda</h1>
-      <p>
-        Akses layanan agcomstore - GitJoki atau kunjungi halaman bisnis kami.
-        Fitur Top Up sedang disiapkan.
-      </p>
-
-      <!-- Tombol 1: Kunjungi Bisnis -->
-      <a
-        href="https://agcomstore.github.io/business.com"
-        target="_blank"
-        rel="noopener"
-        class="btn btn-primary"
-      >
-        <span class="btn-label">
-          <span class="btn-title">Kunjungi Bisnis</span>
-          <span class="btn-sub">agcomstore.github.io/business.com</span>
-        </span>
-        <span class="btn-icon">&rarr;</span>
-      </a>
-
-      <!-- Tombol 2: Top Up (Coming Soon) -->
-      <button
-        type="button"
-        class="btn btn-secondary"
-        disabled
-        aria-disabled="true"
-        title="Fitur Top Up segera hadir"
-      >
-        <span class="btn-label">
-          <span class="btn-title">
-            Top Up
-            <span class="coming-badge">Segera</span>
-          </span>
-          <span class="btn-sub">Fitur sedang disiapkan</span>
-        </span>
-        <span class="btn-icon">&bull;</span>
-      </button>
-    </div>
-
-    <div class="panel-footer">
-      <span>&copy; 2026 agcomstore - GitJoki</span>
-      <span>Semua hak dilindungi</span>
-    </div>
-
-  </div>
-
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  var topUpBtn = document.querySelector('.btn-secondary');
-  if (topUpBtn) {
-    topUpBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      alert('Fitur Top Up segera hadir. Nantikan update dari agcomstore - GitJoki.');
-    });
-  }
 });
 </script>
 
